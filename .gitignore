@@ -1,0 +1,11 @@
+/media
+.idea
+.idea/*
+.DS_Store
+._.DS_Store
+/!resources
+*.sql
+*.log
+*.pyc
+/attendance/core/local_settings/local.py
+/attendance/core/local_settings/secret.py

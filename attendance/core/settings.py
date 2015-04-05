@@ -10,23 +10,36 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from os.path import join, abspath, dirname
+from core.local_settings.local import *
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@1sk#t(zu4$@u*-)g-s-tk_8&gln9o%etxi&ywuh$c!u0klo&f'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost']
 
+here = lambda *x: join(abspath(dirname(__file__)), *x)
+DOCROOT = here('..', '..')
+root = lambda *x: join(abspath(DOCROOT), *x)
+PROJECT_PATH = root('attendance')
 
+STATIC_ROOT_PATH = root(PROJECT_PATH, '..', 'static')
+
+TEMPLATE_DIRS = (
+    root(PROJECT_PATH, '..', 'templates'),
+)
+
+JS_TEMPLATES_DIR = root(PROJECT_PATH, '..', 'static', 'js', 'templates')
+
+JS_CSS_LIST = root(PROJECT_PATH, 'core', 'local_settings', 'static.json')
 # Application definition
 
 INSTALLED_APPS = (
@@ -48,9 +61,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'attendance.urls'
+ROOT_URLCONF = 'core.urls'
 
-WSGI_APPLICATION = 'attendance.wsgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
 
 
 # Database
@@ -58,8 +71,12 @@ WSGI_APPLICATION = 'attendance.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'attendance',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
@@ -81,3 +98,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+from core.local_settings.secret import *

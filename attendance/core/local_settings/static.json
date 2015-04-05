@@ -1,0 +1,28 @@
+{
+    "min_suffix" : "min",
+    
+    
+    "result_pre_js_filename" : "/js/production/pre.js",
+    "result_post_js_filename" : "/js/production/post.js",
+    "result_css_filename" : "/css/_styles.css",
+
+    "yui_compressor" : "",
+    "abs_src_path" : "",
+    
+    
+    "processed_files" : {
+    
+        "js" : {
+            "pre" : [
+
+            ],
+            "post" : [
+
+            ]
+        },
+        
+        "css" : [
+
+        ]
+    }
+}
