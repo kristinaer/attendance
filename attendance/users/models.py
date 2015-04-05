@@ -6,7 +6,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth import login, authenticate
 
-from users.managers import UserManager
 from core.models import BaseModel
 
 
@@ -47,7 +46,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique = True,
         db_index = True,
     )
-    objects = UserManager()
 
     def get_full_name(self):
         return '%s %s %s' % (self.f, self.i, self.o)
@@ -128,10 +126,10 @@ class Speciality(BaseModel):
 
 GROUP_STATUS = (
     ('active', 'активная'),
-    ('delete', 'выпущенная')
+    ('release', 'выпущенная'),
     ('delete', 'удаленная')
 )
-class GroupS(BaseModel):
+class GroupSt(BaseModel):
     '''
     Группа студентов
     '''
@@ -150,7 +148,6 @@ class GroupS(BaseModel):
     starosta = models.ForeignKey(
         User,
         verbose_name = u'Староста',
-        null=True, blank=True,
     )
     status = models.CharField(
         verbose_name = u'Статус',
@@ -175,8 +172,8 @@ class GroupStudents(BaseModel):
         User,
         verbose_name = u'Студент',
     )
-    group = models.ForeignKey(
-        GroupS,
+    groupst = models.ForeignKey(
+        GroupSt,
         verbose_name = u'Группа',
     )
     created_at = models.DateTimeField(
