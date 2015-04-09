@@ -106,9 +106,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.User'
-AUTHENTICATION_BACKENDS = [
-    'users.backends.AuthBackend'
-]
+
 
 
 from core.local_settings.secret import *

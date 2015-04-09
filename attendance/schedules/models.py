@@ -36,7 +36,7 @@ class Subject(BaseModel):
         verbose_name = u'Статус',
         max_length = 50,
         choices=SUBJECT_STATUS,
-        default='active'
+        default=SUBJECT_STATUS[0][0]
     )
     class Meta:
         verbose_name = u'Предмет'
@@ -70,7 +70,7 @@ class Schedule(BaseModel):
         verbose_name = u'Осень/весна',
         max_length = 50,
         choices=OSEN_VESNA_STATUS,
-        default='osen'
+        default=OSEN_VESNA_STATUS[0][0]
     )
     is_numerator = models.BooleanField(
         verbose_name = u'Числитель',
@@ -80,7 +80,7 @@ class Schedule(BaseModel):
         verbose_name = u'Статус',
         max_length = 50,
         choices=SCHEDULE_STATUS,
-        default='active'
+        default=SCHEDULE_STATUS[0][0]
     )
 
     def __unicode__(self):
@@ -111,10 +111,6 @@ class ScheduleList(BaseModel):
         User,
         verbose_name=u'Преподаватель'
     )
-    block_starosta = models.BooleanField(
-        verbose_name = u'Заблокировать старосту',
-        default=False
-    )
     number_pairs = models.IntegerField(
         verbose_name = u'Номер пары'
     )
@@ -122,7 +118,7 @@ class ScheduleList(BaseModel):
         verbose_name = u'Тип',
         max_length = 50,
         choices=TYPE,
-        default='lecture'
+        default=TYPE[0][0]
     )
     subject = models.ForeignKey(
         Subject,
@@ -143,9 +139,8 @@ class ScheduleList(BaseModel):
 
 
 LESSON_STATUS = (
-    ('delete', 'отменен'),
-    ('replace', 'перенесен'),
-    ('standart', 'обычно')
+    ('delete', 'удалено'),
+    ('active', 'активное')
 )
 class Lesson(BaseModel):
     '''
@@ -162,7 +157,7 @@ class Lesson(BaseModel):
         verbose_name = u'Статус',
         max_length = 50,
         choices=LESSON_STATUS,
-        default='standart'
+        default=LESSON_STATUS[1][0]
     )
     is_end = models.BooleanField(
         verbose_name = u'Завершено',
@@ -195,7 +190,7 @@ class LessonStudents(BaseModel):
         verbose_name = u'Статус',
         max_length = 50,
         choices=STATUS_PRESENT,
-        default='present'
+        default=STATUS_PRESENT[0][0]
     )
     note = models.DateTimeField(
         verbose_name = u'Примечание',
@@ -251,7 +246,7 @@ class Task(BaseModel):
         verbose_name = u'Статус',
         max_length = 50,
         choices=TASK_STATUS,
-        default='active'
+        default=TASK_STATUS[0][0]
     )
 
     class Meta:
@@ -280,7 +275,7 @@ class TaskUser(BaseModel):
         auto_now_add = True
     )
     date = models.DateTimeField(
-        verbose_name = u'Дата'
+        verbose_name = u'Дата сдачи'
     )
     note = models.CharField(
         verbose_name = u'Описание',

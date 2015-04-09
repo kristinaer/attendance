@@ -2,17 +2,17 @@
 '''
 Пользователи, роли, права
 '''
+import datetime
+
+from hashlib import sha1
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth import login, authenticate
+from django.contrib.auth.models import BaseUserManager as UserManager
 
 from core.models import BaseModel
 
 
-USERS_STATUS = (
-    ('active', 'активный'),
-    ('delete', 'удаленный')
-)
 class User(AbstractBaseUser, PermissionsMixin):
     '''
     Пользователь
@@ -34,17 +34,21 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name = u'Дата создания пользователя',
         auto_now_add = True
     )
-    status = models.CharField(
-        verbose_name = u'Статус',
-        max_length = 50,
-        choices=USERS_STATUS,
-        default='active'
-    )
     log = models.CharField(
         verbose_name = u'Логин',
         max_length = 254,
         unique = True,
         db_index = True,
+    )
+    # Фикс
+    is_active = models.BooleanField(
+        verbose_name = u'Активный',
+        default=False
+    )
+    is_staff = models.BooleanField(
+        u'Персонал',
+        default=False,
+        help_text= u'Может ли пользователь авторизовываться в админке'
     )
 
     def get_full_name(self):
@@ -56,10 +60,29 @@ class User(AbstractBaseUser, PermissionsMixin):
         else:
             return '%s %s.' % (self.f, self.i[0])
 
+    def check_password(self, raw_password):
+        '''
+        Returns a boolean of whether the raw_password was correct. Handles
+        hashing formats behind the scenes.
+        '''
+        return self.password == raw_password
+
+    def set_password(self, raw_password):
+        self.password = raw_password
+
+    def make_password(self):
+        try:
+            nowstr = unicode(datetime.datetime.now())
+            return sha1(u'%s_%s' % (self.email, nowstr)).hexdigest()[0:6]
+        except UnicodeEncodeError:
+            return None
+
     def force_login(self, request):
         self.is_internal_auth_mode = True
         authenticate(user=self)
         login(request, self)
+
+    objects = UserManager()
 
     USERNAME_FIELD = 'log'
 
@@ -103,7 +126,7 @@ class Speciality(BaseModel):
         verbose_name = u'Квалификация',
         max_length = 50,
         choices=QUALIFICATIONS,
-        default='speciality'
+        default=QUALIFICATIONS[0][0]
     )
     created_at = models.DateTimeField(
         verbose_name = u'Дата создания',
@@ -113,7 +136,7 @@ class Speciality(BaseModel):
         verbose_name = u'Статус',
         max_length = 50,
         choices=SPECIALITY_STATUS,
-        default='active'
+        default=SPECIALITY_STATUS[0][0]
     )
 
     def __unicode__(self):
@@ -153,7 +176,7 @@ class GroupSt(BaseModel):
         verbose_name = u'Статус',
         max_length = 50,
         choices=GROUP_STATUS,
-        default='active'
+        default=GROUP_STATUS[0][0]
     )
 
     def __unicode__(self):
