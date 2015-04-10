@@ -20,13 +20,8 @@ class Subject(BaseModel):
         verbose_name = u'Название',
         max_length = 254,
     )
-    short_name = models.CharField(
-        verbose_name = u'Короткое название',
-        max_length = 50
-    )
-    description = models.CharField(
-        verbose_name = u'Описание',
-        max_length = 250
+    description = models.TextField(
+        verbose_name = u'Описание'
     )
     created_at = models.DateTimeField(
         verbose_name = u'Дата создания',
@@ -192,7 +187,7 @@ class LessonStudents(BaseModel):
         choices=STATUS_PRESENT,
         default=STATUS_PRESENT[0][0]
     )
-    note = models.DateTimeField(
+    note = models.TextField(
         verbose_name = u'Примечание',
         null=True, blank=True
     )
@@ -218,9 +213,8 @@ class Task(BaseModel):
         verbose_name = u'Дата создания',
         auto_now_add = True
     )
-    description = models.CharField(
-        verbose_name = u'Описание',
-        max_length = 250
+    description = models.TextField(
+        verbose_name = u'Описание'
     )
     teacher = models.ForeignKey(
         User,
@@ -277,9 +271,8 @@ class TaskUser(BaseModel):
     date = models.DateTimeField(
         verbose_name = u'Дата сдачи'
     )
-    note = models.CharField(
-        verbose_name = u'Описание',
-        max_length = 250
+    note = models.TextField(
+        verbose_name = u'Описание'
     )
     is_pass = models.BooleanField(
         verbose_name = u'Сдано',

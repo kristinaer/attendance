@@ -1,0 +1,6 @@
+<div id="groups_user_{{ user_id }}">
+{% for group in groupst %}
+<a title="{{ group.speciality__name }}" href="/admin/users/groupst/{{ group.id }}">{{ group.name }}</a><br>
+{% endfor %}
+    <br>
+</div>

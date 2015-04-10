@@ -5,10 +5,11 @@ import pytils
 from django.db.models import Q
 from django import http
 from django import forms
+from django.contrib.admin import SimpleListFilter
 from django.template import loader, Context
 from django.contrib import admin
 from django.forms import ModelForm, HiddenInput
-from users.models import User, Prepod, Student
+from users.models import User, Prepod, Student, Speciality, GroupSt, GroupStudents
 from django.conf.urls import patterns
 from django.utils.safestring import mark_safe
 from core.views.generic import JsonView
@@ -94,5 +95,131 @@ class PrepodAdmin(TemplateUserAdmin):
 admin.site.register(Prepod, PrepodAdmin)
 
 
+class StudentAdminForm(ModelForm):
+    class Meta:
+        model = Student
+        fields = ['f', 'i', 'o', 'is_active', 'log', 'password']
+
+class StarostaListFilter(SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = _('Студенты')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'starosta'
+
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        return (
+            ('yes', _('Старосты')),
+        )
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        if self.value() == 'yes':
+            starosts = GroupSt.objects.filter(starosta__isnull=False).values_list('starosta', flat=True)
+            return queryset.filter(id__in=starosts)
+
+class StudentAdmin(TemplateUserAdmin):
+    list_display = ['id', 'get_fullname',  'get_groupst', 'log']
+    form = StudentAdminForm
+    readonly_fields = ('log', 'password')
+    list_filter = ['is_active', StarostaListFilter]
+    def get_groupst(self, obj):
+        html = loader.get_template('users/backend/_groupst_user.html').render(Context({
+            'user_id': obj.id,
+            'groupst': obj.groupsts.all(),
+        }))
+        return mark_safe(html)
+    get_groupst.allow_tags = True
+    get_groupst.short_description = 'Группа'
+
+    def get_queryset(self, request):
+        qs = super(StudentAdmin, self).get_queryset(request)
+        return qs.filter(groups__name=u'Студенты')
+
+admin.site.register(Student, StudentAdmin)
+
+
 class PermissionAdmin(admin.ModelAdmin): pass
 admin.site.register(Permission, PermissionAdmin)
+
+
+def delete_speciality(modeladmin, request, queryset):
+    queryset.update(status='delete')
+delete_speciality.short_description = u'Удалить выбранные специальности'
+
+class SpecialityAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'qualification']
+    list_filter = ['qualification', 'status']
+    search_fields = ['name']
+    ordering = ['name']
+    actions = [delete_speciality]
+
+admin.site.register(Speciality, SpecialityAdmin)
+
+
+def delete_groupst(modeladmin, request, queryset):
+    queryset.update(status='delete')
+delete_groupst.short_description = u'Удалить выбранные группы'
+
+
+class GroupStAdminForm(ModelForm):
+    users = forms.ModelMultipleChoiceField(
+        User.objects.all(),
+        required=False
+    )
+    class Meta:
+        model = GroupSt
+        fields = ('name', 'speciality', 'date_end', 'starosta', 'status', 'users')
+
+    def __init__(self, *args, **kwargs):
+        specialities = Speciality.objects.order_by('name')
+        users = User.objects.filter(groups__name="Студенты").order_by('f', 'i', 'o')
+
+        super(GroupStAdminForm, self).__init__(*args, **kwargs)
+        choices = [(s.pk, s.name,) for s in specialities]
+        self.fields['speciality'].choices = choices
+        choices = [(None, '---')] + [(u.pk, u.get_full_name(),) for u in users]
+        self.fields['starosta'].choices = choices
+
+
+class GroupStAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'get_speciality', 'get_starosta', 'date_end']
+    list_filter = ['speciality', 'status']
+    search_fields = ['name']
+    ordering = ['date_end']
+    form = GroupStAdminForm
+    date_hierarchy = 'date_end'
+    actions = [delete_groupst]
+    def get_speciality(self, obj):
+        html = loader.get_template('users/backend/_speciality_group.html').render(Context({
+            'groupst_id': obj.id,
+            'speciality': obj.speciality,
+        }))
+        return mark_safe(html)
+    get_speciality.allow_tags = True
+    get_speciality.short_description = 'Специальность'
+
+    def get_starosta(self, obj):
+        html = loader.get_template('users/backend/_starosta_group.html').render(Context({
+            'groupst_id': obj.id,
+            'starosta': obj.starosta,
+        }))
+        return mark_safe(html)
+    get_starosta.allow_tags = True
+    get_starosta.short_description = 'Староста'
+
+admin.site.register(GroupSt, GroupStAdmin)

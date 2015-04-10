@@ -52,6 +52,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         help_text= u'Может ли пользователь авторизовываться в админке'
     )
 
+    groupsts = models.ManyToManyField(
+        'GroupSt',
+        verbose_name=u'Группа',
+        through = 'GroupStudents'
+    )
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.password = User.objects.make_random_password()
+        super(User, self).save( *args, **kwargs)
+
     def get_full_name(self):
         return '%s %s %s' % (self.f, self.i, self.o)
 
@@ -70,13 +81,6 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def set_password(self, raw_password):
         self.password = raw_password
-
-    def make_password(self):
-        try:
-            nowstr = unicode(datetime.datetime.now())
-            return sha1(u'%s_%s' % (self.log, nowstr)).hexdigest()[0:6]
-        except UnicodeEncodeError:
-            return None
 
     def force_login(self, request):
         self.is_internal_auth_mode = True
@@ -102,16 +106,15 @@ class Prepod(User):
         verbose_name = u'Преподаватель'
         verbose_name_plural = u'Преподаватели'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if not self.id:
             self.is_staff = True
-            self.password = User.objects.make_random_password()
             log = pytils.translit.translify(self.f.lower())
             users = User.objects.filter(log__startswith=log)
             if users:
                 log = '%s%s' % (log, users.__len__())
             self.log = log
-        super(Prepod, self).save()
+        super(Prepod, self).save(*args, **kwargs)
         groups = Group.objects.filter(name=u'Преподаватели').all()
         self.groups.add(groups[0])
 
@@ -125,13 +128,12 @@ class Student(User):
 
 QUALIFICATIONS = (
     ('speciality', 'Специалитет'),
-    ('bachelor', 'Бакалавр'),
-    ('master', 'Магистр'),
+    ('bachelor', 'Бакалавриат'),
+    ('master', 'Магистратура'),
     ('graduate', 'Аспирантура'),
 )
 SPECIALITY_STATUS = (
     ('active', 'активная'),
-    ('delete', 'закрытая'),
     ('delete', 'удаленная')
 )
 class Speciality(BaseModel):
@@ -142,13 +144,8 @@ class Speciality(BaseModel):
         verbose_name=u'Название',
         max_length=255,
     )
-    short_name = models.CharField(
-        verbose_name=u'Короткое название',
-        max_length=50,
-    )
-    description = models.CharField(
-        verbose_name=u'Описание',
-        max_length=255,
+    description = models.TextField(
+        verbose_name=u'Описание'
     )
     qualification = models.CharField(
         verbose_name = u'Квалификация',
@@ -177,7 +174,6 @@ class Speciality(BaseModel):
 
 GROUP_STATUS = (
     ('active', 'активная'),
-    ('release', 'выпущенная'),
     ('delete', 'удаленная')
 )
 class GroupSt(BaseModel):
@@ -192,6 +188,10 @@ class GroupSt(BaseModel):
         verbose_name = u'Дата создания',
         auto_now_add = True
     )
+    date_end = models.DateField(
+        verbose_name = u'Дата выпуска',
+        null=True
+    )
     speciality = models.ForeignKey(
         Speciality,
         verbose_name = u'Специальность',
@@ -199,12 +199,19 @@ class GroupSt(BaseModel):
     starosta = models.ForeignKey(
         User,
         verbose_name = u'Староста',
+        null=True, blank=True,
+        related_name='%(class)s_starosta'
     )
     status = models.CharField(
         verbose_name = u'Статус',
         max_length = 50,
         choices=GROUP_STATUS,
         default=GROUP_STATUS[0][0]
+    )
+    users = models.ManyToManyField(
+        'User',
+        verbose_name=u'Студенты',
+        through = 'GroupStudents'
     )
 
     def __unicode__(self):
