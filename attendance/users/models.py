@@ -3,13 +3,14 @@
 Пользователи, роли, права
 '''
 import datetime
+import pytils
 
 from hashlib import sha1
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import BaseUserManager as UserManager
-
+from django.contrib.auth.models import Group
 from core.models import BaseModel
 
 
@@ -73,7 +74,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def make_password(self):
         try:
             nowstr = unicode(datetime.datetime.now())
-            return sha1(u'%s_%s' % (self.email, nowstr)).hexdigest()[0:6]
+            return sha1(u'%s_%s' % (self.log, nowstr)).hexdigest()[0:6]
         except UnicodeEncodeError:
             return None
 
@@ -93,6 +94,33 @@ class User(AbstractBaseUser, PermissionsMixin):
         db_table = 'users'
         verbose_name = u'Пользователь'
         verbose_name_plural = u'Пользователи'
+
+
+class Prepod(User):
+    class Meta:
+        proxy = True
+        verbose_name = u'Преподаватель'
+        verbose_name_plural = u'Преподаватели'
+
+    def save(self):
+        if not self.id:
+            self.is_staff = True
+            self.password = User.objects.make_random_password()
+            log = pytils.translit.translify(self.f.lower())
+            users = User.objects.filter(log__startswith=log)
+            if users:
+                log = '%s%s' % (log, users.__len__())
+            self.log = log
+        super(Prepod, self).save()
+        groups = Group.objects.filter(name=u'Преподаватели').all()
+        self.groups.add(groups[0])
+
+
+class Student(User):
+    class Meta:
+        proxy = True
+        verbose_name = u'Студент'
+        verbose_name_plural = u'Студенты'
 
 
 QUALIFICATIONS = (
