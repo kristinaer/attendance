@@ -62,3 +62,9 @@ class JsonView(ListView):
         '''
         self.fail_result['msg'] = msg
         return self.fail_result
+
+class LoginRequiredMixin(object):
+
+    @classmethod
+    def as_view(cls):
+        return login_required(super(LoginRequiredMixin, cls).as_view())

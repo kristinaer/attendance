@@ -31,7 +31,7 @@ delete_users.short_description = u'Удалить выбранных польз�
 class TemplateUserAdmin(admin.ModelAdmin):
     search_fields = ('log', 'f', 'i', 'o')
     ordering = ['f', 'i', 'o']
-    list_per_page = 10
+    list_per_page = 15
     actions = [delete_users]
 
     @method_decorator(sensitive_post_parameters())
@@ -183,7 +183,7 @@ class GroupStAdminForm(ModelForm):
     )
     class Meta:
         model = GroupSt
-        fields = ('name', 'speciality', 'date_end', 'starosta', 'status', 'users')
+        fields = ('name', 'speciality', 'starosta', 'status', 'users')
 
     def __init__(self, *args, **kwargs):
         specialities = Speciality.objects.order_by('name')
@@ -197,12 +197,11 @@ class GroupStAdminForm(ModelForm):
 
 
 class GroupStAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'get_speciality', 'get_starosta', 'date_end']
+    list_display = ['id', 'name', 'get_speciality', 'get_starosta']
     list_filter = ['speciality', 'status']
     search_fields = ['name']
-    ordering = ['date_end']
     form = GroupStAdminForm
-    date_hierarchy = 'date_end'
+    #date_hierarchy = 'date_end'
     actions = [delete_groupst]
     def get_speciality(self, obj):
         html = loader.get_template('users/backend/_speciality_group.html').render(Context({

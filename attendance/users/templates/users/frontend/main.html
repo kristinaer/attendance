@@ -1,0 +1,319 @@
+{% extends "frontend/base.html" %}
+
+{% block seo_header %}
+<title>Главная {% if seo_title %}| {{ seo_title }}{% endif %}</title>
+<meta name="robots" content="none">
+{% endblock %}
+
+{% block title_page %}Главная{% endblock %}
+
+{% block raspisanie %}
+<ul>
+    {% for item in schedule_lists %}
+    <li class='has-sub'>
+        <a href='#'>
+            <table>
+                <tbody>
+                <tr>
+                    <td style="width:90px;">{{ item.time }}</td>
+                    <td>{{ item.groups.0.subject.name }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+
+
+{% block content %}
+
+			<div class="col-xs-8 marTop25">
+
+				<ul class="nav nav-tabs">  <!-- ������� ��������  ������ -->
+				  	<li class="active"><a href="#tab1" data-toggle="tab">123</a></li>
+				  	<li><a href="#tab2" data-toggle="tab">234</a></li>
+				</ul>
+
+				<ul class="nav nav-tabs"> <!-- ������� ������� ������ -->
+					<li class="active"><a href="#subtab1" data-toggle="tab">ИИС</a></li>
+				  	<li><a href="#subtab2" data-toggle="tab">ИИС2</a></li>
+				</ul>
+
+				<div class="tab-content"> <!-- ������� ������� -->
+
+					<div class="tab-pane active" id="tab1"> <!-- ������� 1 -->
+						<div class="tab-content"><!-- ������� ���������� -->
+							<div class="tab-pane active" id="subtab1"> <!-- ���������� 1 -->
+								<div id="tableDiv_Arrays" class="tableDiv">
+									<table id="Open_Text_Arrays" class="table table-bordered FixedTables" style="margin-bottom:0">
+										<thead>
+											<!-- ��������� ������� -->
+											<tr>
+												<th>
+													���	
+												</th>
+												<th>
+													1.09.2014
+												</th>
+												<th>
+													2.09.2014
+												</th>
+												<th>
+													3.09.2014
+												</th>	
+												<th>
+													4.09.2014
+												</th>
+												<th>
+													5.09.2014
+												</th>				
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													������ ���� ��������	
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													������ ���� ��������	
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													������ ���� ��������	
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													������ ���� ��������	
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													������ ���� ��������	
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													������ ���� ��������	
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													������ ���� ��������	
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													������ ���� ��������	
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+											</tr>
+											<tr>
+												<td>
+													������ ���� ��������	
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+												<td>
+													<input type="checkbox" aria-label="...">
+												</td>
+											</tr>
+										</tbody>
+									</table>	
+								</div>
+								
+								<button type="button" class="btn btn-danger pull-right marLeft10">Удалить</button>
+								<button type="button" class="btn btn-primary pull-right marLeft10">Редактировать</button>
+								<button type="button" class="btn btn-success pull-right marLeft10">Сохранить</button>
+							</div>
+							<div class="tab-pane" id="subtab2"><!-- ���������� 2 -->
+						     	<p>111.</p>
+						    </div>
+						</div>
+					</div>
+
+					<div class="tab-pane" id="tab2"><!-- ������� 2 -->
+				     	<div class="tab-content"><!-- ������� ���������� -->
+							<div class="tab-pane active" id="subtab1"> <!-- ���������� 1 -->
+								<p>123.</p>
+							</div>
+							<div class="tab-pane" id="subtab2"><!-- ���������� 2 -->
+						     	<p>321.</p>
+						    </div>
+						</div>
+				    </div>
+					
+				</div>
+			</div>
+					<!-- ����� ������� -->
+					<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+				    <script src="js/bootstrap.min.js"></script>
+				    <script>
+				        $(function () {
+				            $('.nav-tabs a:first').tab('show');
+				        });
+				    </script>
+
+				    <!-- ��� ������� -->
+				    <script type="text/javascript" src="js/fixedtable.js"></script>
+	                <script type="text/javascript">
+	                // this "tableDiv" must be the table's class
+	                $(".tableDiv").each(function() {
+	                    var Id = $(this).get(0).id;
+	                    var maintbheight = 450;
+	                    var maintbwidth = 840;
+
+	                    $("#" + Id + " .FixedTables").fixedTable({
+	                        width: maintbwidth,
+	                        height: maintbheight,
+	                        fixedColumns: 1,
+	                        // header style
+	                        classHeader: "fixedHead",
+	                        // footer style
+	                        classColumn: "fixedColumn",
+	                        // the width of fixed column on the left
+	                        fixedColumnWidth: 250,
+	                        // table's parent div's id
+	                        outerId: Id,
+	                        // tds' in content area default background color
+	                    });
+	                });
+	                </script>
+
+
+{% endblock %}

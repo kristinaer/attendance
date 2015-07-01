@@ -1,0 +1,77 @@
+{% extends "frontend/base.html" %}
+
+{% block seo_header %}
+<title>Справочник групп {% if seo_title %}| {{ seo_title }}{% endif %}</title>
+<meta name="robots" content="none">
+{% endblock %}
+
+{% block title_page %}Добавление группы{% endblock %}
+
+
+{% block content %}
+
+<div class="col-xs-8 marTop25">
+
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Имя группы</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="inputEmail3" placeholder="Введите имя группы...">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Специальность</label>
+            <div class="col-sm-4">
+                <input type="text" class="form-control" id="inputPassword3" placeholder="Специальность...">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Дата создания</label>
+            <div class="col-sm-4">
+                <input type="datetime" class="form-control" id="inputPassword3" placeholder="Введите дату...">
+            </div>
+        </div>
+        <div class="col-xs-12 brdr padBot25" style="padding-left:0;">
+            <fieldset>
+                <div class="col-xs-12"><h4>Студенты</h4></div>
+                <div class="col-xs-6">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Параметры поиска...">
+					  			<span class="input-group-btn">
+					    			<button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+					  			</span>
+                    </div>
+                </div>
+                <div class="col-xs-7 marTop25">
+                    <table class="table table-bordered">
+                        <tbody>
+                        <!-- заголовок таблицы -->
+                        <tr>
+                            <td style="width:50px;">
+
+                            </td>
+                            <td>
+                                ФИО
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-default" aria-label="Left Align">
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </button>
+                            </td>
+                            <td>
+                                Соколова Ирина Васильевна
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-xs-12">
+                    <button type="button" class="btn btn-success marLeft10">Сохранить</button>
+                </div>
+            </fieldset>
+        </div>
+        <button type="button" class="btn btn-success pull-right marLeft10">Сохранить</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,91 @@
+.brdr{border: 1px #ddd solid;}
+.marTB20{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.marTop25{margin-top: 25px;}
+.marBot20{margin-bottom: 20px;}
+.padBot25{padding-bottom: 25px;}
+.marLeft10{margin-left: 10px;}
+.marRight10{margin-right: 10px;}
+.inline{display: inline-block;}
+
+#cssmenu, #cssmenu ul, #cssmenu ul li, #cssmenu ul li a {
+    display: block;
+    line-height: 1;
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+#cssmenu ul ul {
+    display: none;
+}
+#cssmenu > ul > li > a {
+    cursor: pointer;
+    padding: 15px 20px;
+    z-index: 2;
+}
+.holder {
+    height: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0;
+}
+.holder:after, .holder:before {
+    content: "";
+    display: block;
+    height: 6px;
+    position: absolute;
+    right: 20px;
+    -webkit-transform: rotate(-135deg);
+    -moz-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+    width: 6px;
+    z-index: 10;
+}
+.holder:after {
+    /*border-left: 2px solid #ffffff;
+    border-top: 2px solid #ffffff;*/
+    top: 17px;
+}
+.holder:before {
+    border-left-color: inherit;
+    border-left-style: solid;
+    border-left-width: 2px;
+    border-top-color: inherit;
+    border-top-style: solid;
+    border-top-width: 2px;
+    top: 18px;
+}
+#cssmenu ul ul li a {
+    cursor: pointer;
+    padding: 10px 20px;
+    text-decoration: none;
+    z-index: 1;
+}
+
+#cssmenu ul ul ul li a {
+    padding-left: 30px;
+}
+#cssmenu ul ul li.has-sub > a:after {
+    content: "";
+    display: block;
+    height: 5px;
+    position: absolute;
+    right: 20px;
+    top: 11.5px;
+    -webkit-transform: rotate(-135deg);
+    -moz-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+    width: 5px;
+    z-index: 10;
+}
+
+#cssmenu li a:hover, #cssmenu li.open>a{
+	background-color: #eee !important;
+	border-radius: 0px !important;
+	border-color: #eee !important;
+}
+

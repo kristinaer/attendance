@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for attendance project.
 
@@ -49,7 +50,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'django_hosts',
     'core',
     'users',
     'schedules'
@@ -107,6 +108,31 @@ STATIC_URL = '/static/'
 
 AUTH_USER_MODEL = 'users.User'
 
+################################################################################
+# Настройки приложений
+################################################################################
+STATICFILES_DIRS = (
+    STATIC_ROOT_PATH,
+)
 
+# Настройки для пейджинаторов: кол-во объектов на странице
+PAGINATOR = {
+    'default': {
+        'per_page': 10,
+        },
+    'groups': {
+        'per_page': 15,
+        }
+}
 
+TEMPLATE_CONTEXT_PROCESSORS = [
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.static',
+    'django.contrib.auth.context_processors.auth',
+    'django.contrib.messages.context_processors.messages',
+    'django.core.context_processors.request',
+    'core.context_processors.common',
+]
 from core.local_settings.secret import *

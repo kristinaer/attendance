@@ -1,0 +1,32 @@
+{% load common %}
+<div class="paginator">
+    <div class="handlers">
+        <span class="bold">Страницы</span>
+
+        <span>←</span>
+        {% if pg.prev_page %}
+            <a class="invert" href="{% modify_url 'set_query_param' 'page' pg.prev_page|lower %}">предыдущая</a>
+        {% else %}
+            <span>предыдущая</span>
+        {% endif %}
+        {% if pg.next_page %}
+            <a class="invert" href="{% modify_url 'set_query_param' 'page' pg.next_page|lower %}">следующая</a>
+        {% else %}
+            <span>следующая</span>
+        {% endif %}
+        <span>→</span>
+    </div>
+    <ul class="pages">
+        {% for page in pg.pages %}
+        <li>
+            {% if page.is_active %}
+                {{ page.page_num }}
+            {% else %}
+                <a class="invert" href="{% modify_url 'set_query_param' 'page' page.page_num|lower %}">
+                    {{ page.page_num }}
+                </a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>

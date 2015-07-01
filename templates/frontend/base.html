@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>  <html class="no-js ie lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>     <html class="no-js ie lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>     <html class="no-js ie lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>  <html class="no-js ie" lang="ru"> <![endif]-->
+<!--[if !IE]> -->  <html class="no-js" lang="ru"> <!-- <![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width">
+        {% include "frontend/elements/_css.html" %}
+        {% block seo_header %}111{{ page_title }}{% endblock seo_header %}
+
+        <link rel="icon shortcut" href="{{ STATIC_URL }}img/favicon.ico">
+        <link rel="apple-touch-icon" href="{{ STATIC_URL }}img/favicon.png">{# apple-touch-icon-precomposed #}
+
+        <!--[if lte IE 7]><link rel="stylesheet" href="{{ STATIC_URL }}css/ie-6-7.css"><![endif]-->
+
+
+        {% block extra_css %}{% endblock extra_css %}
+
+        {% block extra_head %}{% endblock extra_head %}
+
+    </head>
+    <body class="{{ current_section }} {% block additional_body_class %}{{ css_parent_class }}{% endblock additional_body_class %}">
+        <header>
+
+        </header>
+
+        <div class="col-xs-12">
+			<div class="container">
+				<div class="col-xs-10"><h2>{% block title_page %}{% endblock title_page %}</h2></div>
+				<div class="col-xs-10"><p>Пользователь: {{  current_user.get_full_name }}</p></div>
+                <a href="/users/logout/">
+                    <button type="button" class="btn btn-warning marTop25">Выйти из системы</button>
+                </a>
+			</div>
+		</div>
+
+
+        <div class="col-xs-12 brdr padBot25">
+
+			<div class="col-xs-4 marTop25">
+				<div id='cssmenu'>
+				    <ul class="nav nav-tabs nav-stacked brdr">
+                       <li class='has-sub'><a href='#'><span>Расписание/числитель</span></a> {% block raspisanie %}{% endblock raspisanie %}</li>
+                       <li><a href='list_lecturers.html'><span>Преподаватель</span></a></li>
+				       <li><a href='list_students.html'><span>Студент</span></a></li>
+				       <li><a href='list_group.html'><span>Группы</span></a></li>
+				       <li><a href='#'><span>Расписание</span></a></li>
+				       <li><a href='#'><span>Учебный план</span></a></li>
+				       <li><a href='#'><span>Отчеты</span></a></li>
+				    </ul>
+				</div>
+			</div>
+
+			<div class="col-xs-8 marTop25">
+
+                 {% block content %}{% endblock content %}
+
+
+			</div>
+		</div>
+
+
+        <div id="content-wrapper">
+
+            {% include "frontend/elements/_footer.html" %}
+
+        </div> <!-- /content-wrapper -->
+
+        {% include "frontend/elements/_js.html" %}
+        {% block modals %}{% endblock modals %}
+
+        <!-- /body-end -->
+
+    </body>
+</html>

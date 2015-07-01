@@ -1,0 +1,71 @@
+{% extends "frontend/base.html" %}
+
+{% block seo_header %}
+<title>Справочник групп {% if seo_title %}| {{ seo_title }}{% endif %}</title>
+<meta name="robots" content="none">
+{% endblock %}
+
+{% block title_page %}Справочник групп{% endblock %}
+
+
+{% block content %}
+
+<div>
+    <button type="button" class="btn btn-success marRight10">Добавить</button>
+    <button type="button" class="btn btn-primary marRight10">Изменить</button>
+    <button type="button" class="btn btn-danger marRight10">Удалить</button>
+</div>
+
+<form>
+    <div class="col-lg-6 marTB20" style="padding-left:0;">
+        <div class="input-group">
+            <input type="text" name="by_text"  value="{{ request.GET.by_text }}" class="form-control" placeholder="Параметры поиска...">
+			     <span class="input-group-btn">
+                     <button class="btn btn-default" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+			     </span>
+        </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+</form>
+
+<table class="table table-bordered">
+    <tbody>
+    <!-- заголовок таблицы -->
+    <tr>
+        <td>
+            № Группы
+        </td>
+        <td>
+            Специальность
+        </td>
+        <td>
+            Дата создания
+        </td>
+        <td>
+            Староста
+        </td>
+    </tr>
+
+    {% for group in paging.objects_list %}
+    <tr>
+        <td>
+           <a href="{{ group.link_edit }}">{{ group.name }}</a>
+        </td>
+        <td>
+            {{ group.speciality.name }}
+        </td>
+        <td>
+            {{ group.created_at|date:"d M Y" }}
+        </td>
+        <td>
+            {% if group.starosta %} {{ group.starosta }} {% else %} - {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+
+    {% if paging.next_page or  paging.prev_page %}
+    {% include "widgets/paginator.html" with pg=paging %}
+    {% endif %}
+</table>
+{% endblock %}

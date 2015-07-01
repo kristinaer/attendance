@@ -1,0 +1,39 @@
+{% load hosts %}
+{% load common %}
+{% load feincms_page_tags %}
+<ul id="main-menu-block">
+    {% feincms_nav feincms_page level=1 depth=1 as sublevel %}
+    {% for p in sublevel %}
+    <li {% if p.settings.affects_section and current_section == p.settings.affects_section %} class="active"{% endif %}>
+        <a {% if p.settings.menu_item_class %}class="{{ p.settings.menu_item_class }}"{% endif %} href="{% if p.slug == 'info' %}{% host_url info_frontend:index on info %}{% else %}//{{ config.local.domain }}{% if p.slug != 'index' %}/{{ p.slug }}{% endif %}/{% endif %}">{{ p.title }}</a>
+    </li>
+    {% endfor %}
+
+    <li class="pull-right to-radio">
+        <a href="http://{{ config.local.domain }}/radio/">
+            <i class="icon-16 menu-radio"></i>
+        </a>
+    </li>
+    <li class="pull-right separator"></li>
+    {% if current_user.is_authenticated %}
+    <li class="pull-right">
+        <a href="http://{{ config.local.domain }}/user/logout/">
+            <i class="icon-16 menu-exit"></i>Выйти
+        </a>
+    </li>
+    <li class="pull-right separator"></li>
+    <li class="pull-right username">
+        <a href="http://{{ config.local.domain }}/private/user/profile/" class="private-drop-down" rel="nofollow" title="{{ current_user.name }}">
+            <i class="icon-16 menu-person"></i>{{ current_user.name|truncatechars:10 }}<span class="caret"></span>
+        </a>
+        <ul id="private-drop-down-menu" class="dropdown-menu"></ul>
+    </li>
+    {% else %}
+    <li class="pull-right">
+        <a href="http://{{ config.local.domain }}/private/user/profile/">
+            <i class="icon-16 menu-person"></i>Личный кабинет
+        </a>
+    </li>
+    {% endif %}
+</ul>
+<div class="radio-hint"></div>

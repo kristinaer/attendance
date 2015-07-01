@@ -11,8 +11,14 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.models import BaseUserManager as UserManager
 from django.contrib.auth.models import Group
+from django_hosts import reverse_full
 from core.models import BaseModel
 
+
+STATUS = (
+    ('active', 'активный'),
+    ('delete', 'удаленный')
+)
 
 class User(AbstractBaseUser, PermissionsMixin):
     '''
@@ -132,10 +138,7 @@ QUALIFICATIONS = (
     ('master', 'Магистратура'),
     ('graduate', 'Аспирантура'),
 )
-SPECIALITY_STATUS = (
-    ('active', 'активная'),
-    ('delete', 'удаленная')
-)
+
 class Speciality(BaseModel):
     '''
     Специальности
@@ -143,6 +146,10 @@ class Speciality(BaseModel):
     name = models.CharField(
         verbose_name=u'Название',
         max_length=255,
+    )
+    short_name = models.CharField(
+        verbose_name=u'Короткое_название',
+        max_length=25,
     )
     description = models.TextField(
         verbose_name=u'Описание'
@@ -160,9 +167,14 @@ class Speciality(BaseModel):
     status = models.CharField(
         verbose_name = u'Статус',
         max_length = 50,
-        choices=SPECIALITY_STATUS,
-        default=SPECIALITY_STATUS[0][0]
+        choices=STATUS,
+        default=STATUS[0][0]
     )
+    #subjects = models.ManyToManyField(
+    #    'Subject',
+    #    verbose_name=u'Предметы',
+    #    through = 'SpecialitySubject'
+    #)
 
     def __unicode__(self):
         return self.name
@@ -172,10 +184,6 @@ class Speciality(BaseModel):
         verbose_name_plural = u'Специальности'
 
 
-GROUP_STATUS = (
-    ('active', 'активная'),
-    ('delete', 'удаленная')
-)
 class GroupSt(BaseModel):
     '''
     Группа студентов
@@ -186,11 +194,7 @@ class GroupSt(BaseModel):
     )
     created_at = models.DateTimeField(
         verbose_name = u'Дата создания',
-        auto_now_add = True
-    )
-    date_end = models.DateField(
-        verbose_name = u'Дата выпуска',
-        null=True
+        default=datetime.datetime.now
     )
     speciality = models.ForeignKey(
         Speciality,
@@ -205,14 +209,21 @@ class GroupSt(BaseModel):
     status = models.CharField(
         verbose_name = u'Статус',
         max_length = 50,
-        choices=GROUP_STATUS,
-        default=GROUP_STATUS[0][0]
+        choices=STATUS,
+        default=STATUS[0][0]
     )
     users = models.ManyToManyField(
         'User',
         verbose_name=u'Студенты',
         through = 'GroupStudents'
     )
+
+    def link_edit(self):
+        return reverse_full(
+            'base',
+            'users_frontend:group_edit',
+            view_kwargs={'pk': self.pk}
+        )
 
     def __unicode__(self):
         return self.name
@@ -241,6 +252,12 @@ class GroupStudents(BaseModel):
     deleted_at = models.DateTimeField(
         verbose_name = u'Дата отчисления',
         null=True, blank=True
+    )
+    status = models.CharField(
+        verbose_name = u'Статус',
+        max_length = 50,
+        choices=STATUS,
+        default=STATUS[0][0]
     )
 
     class Meta:
