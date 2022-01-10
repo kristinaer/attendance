@@ -3,7 +3,7 @@ Pillow==2.4.0
 docutils==0.9.1
 django-mptt==0.6.1
 pytils==0.3
-celery==3.1.13
+celery==5.2.2
 django-celery==3.1.10
 sorl-thumbnail==11.12.1b
 django-ckeditor-updated==4.4
